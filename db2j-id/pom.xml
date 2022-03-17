@@ -90,6 +90,18 @@
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.oracle.database.jdbc.debug</groupId>-->
+<!--            <artifactId>ojdbc11_g</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.oracle.database.observability</groupId>-->
+<!--            <artifactId>ojdbc11dms</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 
 </project>

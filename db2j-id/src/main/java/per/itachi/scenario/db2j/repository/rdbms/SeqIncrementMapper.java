@@ -8,11 +8,11 @@ import per.itachi.scenario.db2j.entity.db.SeqIncrement;
 public interface SeqIncrementMapper {
 
     SeqIncrement findByTableNameAndNbrAndCol(@Param("tableName") String tableName,
-                                             @Param("tableNbr") String tableNbr,
+                                             @Param("tableNbr") int tableNbr,
                                              @Param("columnName") String columnName);
 
     int save(@Param("seqIncrement") SeqIncrement seqIncrement);
 
-    int updateByTableNameAndNbrAndCol(@Param("seqIncrement") SeqIncrement seqIncrement);
+    int updateCurPosByTableNameAndNbrAndCol(@Param("seqIncrement") SeqIncrement seqIncrement);
 
 }

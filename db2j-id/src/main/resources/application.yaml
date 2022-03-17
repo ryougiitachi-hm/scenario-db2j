@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+# spring datasource
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:33001/scenario
+    username: root
+    password: 123456
+    hikari:
+      pool-name: hikari-mysql
+      auto-commit: false
+      connection-timeout: 5000
+      #idle-timeout: ''
+
+# mybatis
+# http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/
+mybatis:
+  type-aliases-package: per.itachi.scenario.db2j.entity.db
+  mapper-locations: mapper/mysql/*Mapper.xml
+
+# biz strategy
+db:
+  id-gen:
+    snowflake:
+      sequence:
+        step-size: 10

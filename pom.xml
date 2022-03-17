@@ -23,6 +23,8 @@
         <lombok.version>1.18.20</lombok.version>
         <spring.boot.version>2.6.3</spring.boot.version>
         <mybatis.spring.boot.version>2.2.2</mybatis.spring.boot.version>
+        <jdbc.mysql.version>8.0.28</jdbc.mysql.version>
+        <jdbc.oracle.version>21.5.0.0</jdbc.oracle.version>
     </properties>
 
     <dependencyManagement>
@@ -68,6 +70,18 @@
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis.spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${jdbc.mysql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.database.jdbc</groupId>
+                <artifactId>ojdbc-bom</artifactId>
+                <version>${jdbc.oracle.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
