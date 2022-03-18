@@ -7,7 +7,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:33001/scenario
     username: root
-    password: 123456
+    password: 12345
     hikari:
       pool-name: hikari-mysql
       auto-commit: false

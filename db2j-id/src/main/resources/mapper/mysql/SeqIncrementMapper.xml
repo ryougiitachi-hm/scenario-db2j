@@ -61,7 +61,7 @@
         UPDATE T_SEQ_INCREMENT A
         SET A.CURRENT_POS = A.CURRENT_POS + A.STEP_SIZE,
             A.VERSION = A.VERSION + 1,
-            A.EDATE = #{seqIncrement.edate,jdbcType=TIMESTAMP})
+            A.EDATE = #{seqIncrement.edate,jdbcType=TIMESTAMP}
         WHERE A.TABLE_NAME = #{seqIncrement.tableName,jdbcType=VARCHAR}
             AND A.TABLE_NBR =  #{seqIncrement.tableNbr,jdbcType=INTEGER}
             AND A.COLUMN_NAME = #{seqIncrement.columnName,jdbcType=VARCHAR}

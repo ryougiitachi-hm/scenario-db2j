@@ -3,8 +3,10 @@ package per.itachi.scenario.db2j.manager.idgen;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import per.itachi.scenario.db2j.manager.IdGenerator;
 
+@Component
 public class SnowflakeIdGenerator implements IdGenerator {
 
     /**
