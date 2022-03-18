@@ -26,3 +26,4 @@ db:
     snowflake:
       sequence:
         step-size: 10
+        log-count-of-retry-threshold: 10

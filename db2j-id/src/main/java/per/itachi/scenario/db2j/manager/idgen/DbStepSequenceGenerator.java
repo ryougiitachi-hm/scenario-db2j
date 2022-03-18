@@ -1,18 +1,19 @@
 package per.itachi.scenario.db2j.manager.idgen;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import per.itachi.scenario.db2j.adapter.rdbms.SeqIncrementPort;
 import per.itachi.scenario.db2j.entity.db.SeqIncrement;
-import per.itachi.scenario.db2j.repository.rdbms.SeqIncrementMapper;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,10 +25,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * Reset current position, may be optional, too complicated ( *_ *).
  * */
+@Slf4j
 @Component
 public class DbStepSequenceGenerator implements SequenceGenerator{
-
-    private static final int DEFAULT_STEP_SIZE = 20;
 
     /**
      * just disposable
@@ -35,8 +35,11 @@ public class DbStepSequenceGenerator implements SequenceGenerator{
     @Value("${db.id-gen.snowflake.sequence.step-size}")
     private int stepSize;
 
+    @Value("${db.id-gen.snowflake.sequence.log-count-of-retry-threshold}")
+    private int logCountOfRetryThreshold;
+
     @Autowired
-    private SeqIncrementMapper seqIncrementMapper;
+    private SeqIncrementPort seqIncrementPort;
 
     private ConcurrentMap<List<Serializable>, DbStepSequenceValue> stepSequences;
 
@@ -60,7 +63,7 @@ public class DbStepSequenceGenerator implements SequenceGenerator{
             // TODO: may load repeatly under high concurrency, local synchronized?
             // Considering about multiple operations in the same jvm process,
             // local synchronization may be feasible and operable, e.g. ReentrantLock or synchronized.
-            SeqIncrement seqIncrement = generateNextStep(tableName, tableNbr, columnName);
+            SeqIncrement seqIncrement = generateNextStepWithLoopRetry(tableName, tableNbr, columnName);
             value = DbStepSequenceValue.builder()
                     .increment(new AtomicInteger(0))
                     .currentPos(seqIncrement.getCurrentPos())
@@ -73,45 +76,46 @@ public class DbStepSequenceGenerator implements SequenceGenerator{
         // First increment and then get ? AtomicInteger must guarantee serializable increment.
         // Under over-counting, it is required to distinguish between bound case and outbound case.
         AtomicInteger increment = value.getIncrement();
-        int tmpIncrement = increment.incrementAndGet();
+        int currentIncrement = increment.incrementAndGet();
 //        -- tmpIncrement; // 0-based can avoid -- operation
-        if (tmpIncrement <= value.getStepSize()) {
-            return value.getCurrentPos() + tmpIncrement;
-        }
 
         // TODO: local synchronization?
         // How to take a lock with granularity of the specific key.
-        SeqIncrement seqIncrement = generateNextStep(tableName, tableNbr, columnName);
-        value = DbStepSequenceValue.builder()
-                .increment(new AtomicInteger(0))
-                .currentPos(seqIncrement.getCurrentPos())
-                .stepSize(seqIncrement.getStepSize())
-                .build();
-        stepSequences.put(key, value);
+        int countOfRetry = 0;
+        while (currentIncrement > value.getStepSize()) {
+            if (++countOfRetry >= logCountOfRetryThreshold) {
+                log.warn("The count of retry for generateNextStepWithLoopRetry is {}, tableName={}, tableNbr={}, columnName={}. ",
+                        countOfRetry, tableName, tableNbr, columnName);
+            }
+            // beyond step size, reload db.
+            SeqIncrement seqIncrement = generateNextStepWithLoopRetry(tableName, tableNbr, columnName);
+            value = DbStepSequenceValue.builder()
+                    .increment(new AtomicInteger(0))
+                    .currentPos(seqIncrement.getCurrentPos())
+                    .stepSize(seqIncrement.getStepSize())
+                    .build();
+            stepSequences.put(key, value);
+            currentIncrement = increment.incrementAndGet();
+        }
 
-        // while loop may be better.
-        increment = value.getIncrement();
-        tmpIncrement = increment.incrementAndGet();
-        return value.getCurrentPos() + tmpIncrement;
+        return value.getCurrentPos() + currentIncrement;
     }
 
-    private SeqIncrement generateNextStep(String tableName, int tableNbr, String columnName) {
-        SeqIncrement seqIncrement = seqIncrementMapper
-                .findByTableNameAndNbrAndCol(tableName, tableNbr, columnName);
-        if (seqIncrement == null) {
-            seqIncrement = new SeqIncrement();
-            seqIncrement.setTableName(tableName);
-            seqIncrement.setTableNbr(tableNbr);
-            seqIncrement.setColumnName(columnName);
-            seqIncrement.setStepSize(DEFAULT_STEP_SIZE);
-            seqIncrement.setCurrentPos(0); // 0-based, which can avoid -- operation, 1 is the first element.
-            seqIncrement.setVersion(1);
-            seqIncrement.setCdate(LocalDateTime.now());
-            seqIncrement.setEdate(LocalDateTime.now());
-            seqIncrementMapper.save(seqIncrement);
-        }
-        seqIncrementMapper.updateCurPosByTableNameAndNbrAndCol(seqIncrement); // TODO: lacks retry.
-        return seqIncrement;
+    /**
+     * workaround
+     * */
+    private SeqIncrement generateNextStepWithLoopRetry(String tableName, int tableNbr, String columnName) {
+        int countOfRetry = 0;
+        Optional<SeqIncrement> seqIncrementOptional = Optional.empty();
+        do {
+            if (++countOfRetry >= logCountOfRetryThreshold) {
+                log.warn("The count of retry for generateNextStepWithLoopRetry is {}, tableName={}, tableNbr={}, columnName={}. ",
+                        countOfRetry, tableName, tableNbr, columnName);
+            }
+            seqIncrementOptional = seqIncrementPort
+                    .generateNextStep(tableName, tableNbr, columnName);
+        } while (!seqIncrementOptional.isPresent()); // infinite loop retry.
+        return seqIncrementOptional.get();
     }
 
 }
