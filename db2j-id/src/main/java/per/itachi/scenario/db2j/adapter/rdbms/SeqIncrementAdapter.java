@@ -33,6 +33,7 @@ public class SeqIncrementAdapter implements SeqIncrementPort{
             seqIncrement = save(tableName, tableNbr, columnName).get();
         }
 
+        seqIncrement.setEdate(LocalDateTime.now());
         int countOfRows = mapper.updateCurPosByTableNameAndNbrAndCol(seqIncrement);
         if (countOfRows <= 0) {
             return Optional.empty();
@@ -48,7 +49,6 @@ public class SeqIncrementAdapter implements SeqIncrementPort{
     @Override
     public Optional<SeqIncrement> save(String tableName, int tableNbr, String columnName) {
         SeqIncrement seqIncrement = new SeqIncrement();
-        seqIncrement = new SeqIncrement();
         seqIncrement.setTableName(tableName);
         seqIncrement.setTableNbr(tableNbr);
         seqIncrement.setColumnName(columnName);

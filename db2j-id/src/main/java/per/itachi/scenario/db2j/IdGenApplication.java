@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableTransactionManagement
+@EnableTransactionManagement // optional, transaction management can enable without this annotation.
 @SpringBootApplication
 public class IdGenApplication {
 
