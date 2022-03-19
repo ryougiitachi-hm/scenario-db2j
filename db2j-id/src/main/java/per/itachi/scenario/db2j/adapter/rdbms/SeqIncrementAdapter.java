@@ -1,5 +1,7 @@
 package per.itachi.scenario.db2j.adapter.rdbms;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -8,9 +10,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import per.itachi.scenario.db2j.entity.db.SeqIncrement;
 import per.itachi.scenario.db2j.repository.rdbms.SeqIncrementMapper;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Slf4j
 @Repository
@@ -33,7 +32,6 @@ public class SeqIncrementAdapter implements SeqIncrementPort{
             seqIncrement = save(tableName, tableNbr, columnName).get();
         }
 
-        seqIncrement.setEdate(LocalDateTime.now());
         int countOfRows = mapper.updateCurPosByTableNameAndNbrAndCol(seqIncrement);
         if (countOfRows <= 0) {
             return Optional.empty();
