@@ -1,14 +1,5 @@
 package per.itachi.scenario.db2j.manager.idgen;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import per.itachi.scenario.db2j.adapter.rdbms.SeqIncrementPort;
-import per.itachi.scenario.db2j.entity.db.SeqIncrement;
-
-import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +8,13 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import per.itachi.scenario.db2j.adapter.rdbms.SeqIncrementPort;
+import per.itachi.scenario.db2j.entity.db.SeqIncrement;
 
 /**
  * need to consider solutions about the following limits:
@@ -48,7 +46,9 @@ public class DbStepSequenceGenerator implements SequenceGenerator{
         this.stepSequences = new ConcurrentHashMap<>();
     }
 
-    @Transactional
+    /**
+     * Removing @Transactional should be better.
+     * */
     @Override
     public int generateNextSequence(String tableName, int tableNbr, String columnName) {
         Objects.requireNonNull(tableName, "tableName can not be null. ");
@@ -95,6 +95,7 @@ public class DbStepSequenceGenerator implements SequenceGenerator{
                     .stepSize(seqIncrement.getStepSize())
                     .build();
             stepSequences.put(key, value);
+            increment = value.getIncrement(); // key statement, if no, infinite retry.
             currentIncrement = increment.incrementAndGet();
         }
 

@@ -16,7 +16,7 @@ import java.util.Optional;
 @Repository
 public class SeqIncrementAdapter implements SeqIncrementPort{
 
-    private static final int DEFAULT_STEP_SIZE = 20;
+    private static final int DEFAULT_STEP_SIZE = 10;
 
     @Autowired
     private SeqIncrementMapper mapper;
@@ -35,7 +35,7 @@ public class SeqIncrementAdapter implements SeqIncrementPort{
 
         int countOfRows = mapper.updateCurPosByTableNameAndNbrAndCol(seqIncrement);
         if (countOfRows <= 0) {
-            Optional.empty();
+            return Optional.empty();
         }
         if (countOfRows >= 2) {
             log.warn("The count of impacted rows is {}, updateCurPosByTableNameAndNbrAndCol. ", countOfRows);

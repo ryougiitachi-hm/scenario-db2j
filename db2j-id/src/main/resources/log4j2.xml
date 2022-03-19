@@ -98,7 +98,9 @@
 		<!-- 同步 -->
 		<Logger name="org.springframework" level="info"/>
 		<Logger name="org.springframework.boot" level="info"/>
-		<Logger name="org.apache.ibatis" level="info"/>
+		<Logger name="org.apache.ibatis" level="debug"/>
+		<Logger name="per.itachi.scenario" level="info"/>
+		<Logger name="per.itachi.scenario.db2j.repository.rdbms" level="debug"/>
 		<Root level="info">
 			<AppenderRef ref="Console"/>
 		</Root>
@@ -110,4 +112,5 @@
 			<appender-ref ref="Daily"/>
 		</Asyncroot> -->
 	</Loggers>
+
 </Configuration>
