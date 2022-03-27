@@ -43,7 +43,7 @@ public class SnowflakeIdGenerator implements IdGenerator {
     private SequenceGenerator sequenceGenerator;
 
     @Override
-    public long generate(String tableName, int tableNbr, String columnName) {
+    public Long generate(String tableName, int tableNbr, String columnName) {
         validateCountOfBits();
         long id = 0;
         // timestamp

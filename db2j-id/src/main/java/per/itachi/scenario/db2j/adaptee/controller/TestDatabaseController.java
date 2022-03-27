@@ -1,5 +1,6 @@
 package per.itachi.scenario.db2j.adaptee.controller;
 
+import java.io.Serializable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +18,9 @@ public class TestDatabaseController {
     private IdGenerator idGenerator;
 
     @GetMapping("/id-generator/snowflake")
-    public long testSnowflakeIdGenerator(@RequestParam String tableName,
+    public Serializable testSnowflakeIdGenerator(@RequestParam String tableName,
                                          @RequestParam int tableNbr, @RequestParam String columnName) {
-        long id = idGenerator.generate(tableName, tableNbr, columnName);
+        Serializable id = idGenerator.generate(tableName, tableNbr, columnName);
         log.info("The generated id is {}. ", id);
         return id;
     }
