@@ -12,6 +12,7 @@
         <module>db2j-id</module>
         <module>db2j-shard</module>
         <module>db2j-shardsphere</module>
+        <module>db2j-canal</module>
     </modules>
 
     <properties>
