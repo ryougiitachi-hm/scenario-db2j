@@ -78,20 +78,21 @@
 			百分号%的转义字符；
 	 -->
 	<Properties>
-		<Properties name="PATTERN_LAYOUT_DEFAULT">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t][%-5level][%u{RANDOM}][%logger] - %msg %n</Properties>
+		<Property name="APP_NAME">db2j-id</Property>
+		<Property name="PATTERN_LAYOUT_DEFAULT">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t][%-5level][%u{RANDOM}][%logger] - %msg %n</Property>
 	</Properties>
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
-			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t][%-5level][%u{RANDOM}][%logger] - %msg %n"/>
+			<PatternLayout pattern="${sys:PATTERN_LAYOUT_DEFAULT}"/>
 		</Console>
-		<RollingFile name="Daily" fileName="log/app.log"
-				filePattern="log/app.%d{yyyy-MM-dd}.log">
-			<PatternLayout pattern="${PATTERN_LAYOUT_DEFAULT}"/>
+		<RollingFile name="Daily" fileName="log/${APP_NAME}.log"
+				filePattern="log/${APP_NAME}.%d{yyyy-MM-dd}.log">
+			<PatternLayout pattern="${sys:PATTERN_LAYOUT_DEFAULT}"/>
 			<SizeBasedTriggeringPolicy size="1GB"/>
 			<DefaultRolloverStrategy max="30"/>
 		</RollingFile>
-		<RandomAccessFile name="daily-raf" fileName="log/app-raf.log" immediateFlush="false" append="false">
-			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t][%-5level][%X{trace-id}][%logger] - %msg %n"/>
+		<RandomAccessFile name="daily-raf" fileName="log/${APP_NAME}-raf.log" immediateFlush="false" append="false">
+			<PatternLayout pattern="${sys:PATTERN_LAYOUT_DEFAULT}"/>
 		</RandomAccessFile>
 	</Appenders>
 	<Loggers>
