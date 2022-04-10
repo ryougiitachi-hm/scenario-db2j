@@ -101,7 +101,8 @@
 		<Logger name="org.springframework.boot" level="info"/>
 		<Logger name="org.apache.ibatis" level="debug"/>
 		<Logger name="per.itachi.scenario" level="info"/>
-		<Logger name="per.itachi.scenario.db2j.repository.rdbms" level="debug"/>
+<!--		<Logger name="per.itachi.scenario.db2j.repository.rdbms" level="debug"/>-->
+		<Logger name="per.itachi.scenario.db2j.manager" level="debug"/>
 		<Root level="info">
 			<AppenderRef ref="Console"/>
 		</Root>

@@ -13,7 +13,7 @@ import per.itachi.scenario.db2j.manager.IdGenerator;
  * [date] + [dbNbr] + [tableNbr] + [sequence]
  * [8bytes] + [3bytes] + [3bytes] + [11bytes]
  * */
-@Primary
+//@Primary
 @Component
 public class OrderNbrGenerator implements IdGenerator {
 

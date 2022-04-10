@@ -25,6 +25,11 @@ mybatis:
 db:
   id-gen:
     snowflake:
+      count-of-bits:
+        timestamp: 41
+        db-nbr: 5
+        table-nbr: 5
+        sequence: 12
       sequence:
         step-size: 10
         log-count-of-retry-threshold: 10
