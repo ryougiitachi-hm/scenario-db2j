@@ -1,0 +1,17 @@
+spring:
+  shardingsphere:
+    datasource:
+      names: ds-master-000,ds-master-001
+      common:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      ds-master-000:
+        username: root
+        password: 123456
+        jdbc-url: jdbc:mysql://127.0.0.1:33000/scenario
+        type: com.zaxxer.hikari.HikariDataSource
+      ds-master-001:
+        username: root
+        password: 123456
+        jdbc-url: jdbc:mysql://127.0.0.1:33001/scenario
+        type: com.zaxxer.hikari.HikariDataSource

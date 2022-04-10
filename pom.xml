@@ -28,6 +28,7 @@
         <mybatis.spring.boot.version>2.2.2</mybatis.spring.boot.version>
         <jdbc.mysql.version>8.0.28</jdbc.mysql.version>
         <jdbc.oracle.version>21.5.0.0</jdbc.oracle.version>
+        <apache.shardingsphere.version>5.1.0</apache.shardingsphere.version>
     </properties>
 
     <dependencyManagement>
@@ -75,10 +76,18 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-parent</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis.spring.boot.version}</version>
             </dependency>
+            <!-- jdbc -->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
@@ -90,6 +99,41 @@
                 <version>${jdbc.oracle.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <!-- apache shardingsphere -->
+<!--            <dependency>-->
+<!--                <groupId>org.apache.shardingsphere</groupId>-->
+<!--                <artifactId>shardingsphere-jdbc</artifactId>-->
+<!--                <version>${apache.shardingsphere.version}</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-jdbc-core-spring</artifactId>
+                <version>${apache.shardingsphere.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-jdbc-core</artifactId>
+                <version>${apache.shardingsphere.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-jdbc-core-spring-namespace</artifactId>
+                <version>${apache.shardingsphere.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
+                <version>${apache.shardingsphere.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-jdbc-transaction-spring</artifactId>
+                <version>${apache.shardingsphere.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
