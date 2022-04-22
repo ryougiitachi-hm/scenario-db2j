@@ -13,6 +13,7 @@
         <module>db2j-shard</module>
         <module>db2j-shardsphere</module>
         <module>db2j-canal</module>
+        <module>db2j-maxwell</module>
     </modules>
 
     <properties>
