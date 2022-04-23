@@ -14,6 +14,8 @@
         <module>db2j-shardsphere</module>
         <module>db2j-canal</module>
         <module>db2j-maxwell</module>
+        <module>db2j-databus</module>
+        <module>db2j-debezium</module>
     </modules>
 
     <properties>
@@ -32,6 +34,7 @@
         <jdbc.mysql.version>8.0.28</jdbc.mysql.version>
         <jdbc.oracle.version>21.5.0.0</jdbc.oracle.version>
         <apache.shardingsphere.version>5.1.0</apache.shardingsphere.version>
+        <debezium.version>1.9.1.Final</debezium.version>
     </properties>
 
     <dependencyManagement>
@@ -142,6 +145,13 @@
                 <groupId>org.apache.shardingsphere</groupId>
                 <artifactId>shardingsphere-jdbc-transaction-spring</artifactId>
                 <version>${apache.shardingsphere.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.debezium</groupId>
+                <artifactId>debezium-bom</artifactId>
+                <version>${debezium.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
